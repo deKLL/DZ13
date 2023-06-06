@@ -1,0 +1,131 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct Book {
+    int id;
+
+
+    Book(int bookId) : id(bookId) {}
+};
+
+//перевірка чи існує книга з заданим id в системі
+bool isBookExists(const vector<Book>& library, int bookId) {
+    for (const Book& book : library) {
+        if (book.id == bookId) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//додавання нової книги до системи
+void addBook(vector<Book>& library, int bookId) {
+    if (isBookExists(library, bookId)) {
+        cout << "Книга з таким ID вже існує." << endl;
+    } else {
+        Book newBook(bookId);
+        library.push_back(newBook);
+        cout << "Книга додана успішно." << endl;
+    }
+}
+
+сортування бібліотеки за ID книги за спаданням
+void sortLibraryDescending(vector<Book>& library) {
+    sort(library.begin(), library.end(), [](const Book& a, const Book& b) {
+        return a.id > b.id;
+    });
+    cout << "Бібліотека відсортована за спаданням ID." << endl;
+}
+
+сортування бібліотеки за ID книги за зростанням
+void sortLibraryAscending(vector<Book>& library) {
+    sort(library.begin(), library.end(), [](const Book& a, const Book& b) {
+        return a.id < b.id;
+    });
+    cout << "Бібліотека відсортована за зростанням ID." << endl;
+}
+
+// Функція для випадкового перемішування книг в бібліотеці
+void shuffleLibrary(vector<Book>& library) {
+    random_shuffle(library.begin(), library.end());
+    cout << "Бібліотека була перемішана випадковим чином." << endl;
+}
+
+// Функція для лінійного пошуку книги за ID
+void searchBook(const vector<Book>& library, int bookId) {
+    for (const Book& book : library) {
+        if (book.id == bookId) {
+            cout << "Книга знайдена у бібліотеці." << endl;
+            return;
+        }
+    }
+    cout << "Книга не знайдена у бібліотеці." << endl;
+}
+
+int main() {
+    vector<Book> library;
+
+    int initialBooks;
+    cout << "Введіть початкову кількість книг: ";
+    cin >> initialBooks;
+
+    for (int i = 0; i < initialBooks; i++) {
+        int bookId;
+        cout << "Введіть ID книги " << i + 1 << ": ";
+        cin >> bookId;
+        addBook(library, bookId);
+    }
+
+    int choice;
+    do {
+        cout << endl;
+        cout << "Меню:" << endl;
+        cout << "1. Додати нову книгу" << endl;
+        cout << "2. Сортувати бібліотеку за спаданням ID" << endl;
+        cout << "3. Сортувати бібліотеку за зростанням ID" << endl;
+        cout << "4. Перемішати книги" << endl;
+        cout << "5. Пошук книги за ID" << endl;
+        cout << "0. Вийти" << endl;
+        cout << "Ваш вибір: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                int newBookId;
+                cout << "Введіть ID нової книги: ";
+                cin >> newBookId;
+                addBook(library, newBookId);
+                break;
+            }
+            case 2: {
+                sortLibraryDescending(library);
+                break;
+            }
+            case 3: {
+                sortLibraryAscending(library);
+                break;
+            }
+            case 4: {
+                shuffleLibrary(library);
+                break;
+            }
+            case 5: {
+                int searchBookId;
+                cout << "Введіть ID книги для пошуку: ";
+                cin >> searchBookId;
+                searchBook(library, searchBookId);
+                break;
+            }
+            case 0:
+                cout << "До побачення!" << endl;
+                break;
+            default:
+                cout << "Невірний вибір. Спробуйте ще раз." << endl;
+                break;
+        }
+    } while (choice != 0);
+
+    return 0;
+}
